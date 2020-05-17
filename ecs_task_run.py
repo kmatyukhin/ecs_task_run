@@ -5,9 +5,6 @@ import click
 import boto3
 
 
-CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
-
-
 class ECSTaskRun:
     params = {}
     def __init__(self, *args, sts_client=None, **kwargs):
@@ -15,7 +12,7 @@ class ECSTaskRun:
         self.sts_client = (
             sts_client if sts_client is not None
             else boto3.client("sts", region_name=kwargs['aws_region']))
-        if 'assume_role' in kwargs:
+        if kwargs.get('assume_role'):
             self.assume_role(kwargs['assume_role'])
 
     def assume_role(self, role):
@@ -26,8 +23,9 @@ class ECSTaskRun:
         return "Success"
 
 
-@click.command(context_settings=CONTEXT_SETTINGS)
-@click.pass_context
+@click.command(
+    context_settings=dict(help_option_names=['-h', '--help'])
+)
 @click.option(
     "--cluster", "-c", "cluster_name", type=str, required=True,
     help="Name of ECS cluster",
@@ -40,6 +38,7 @@ class ECSTaskRun:
     "--assume-role", "-a", "assume_role", type=str,
     help="Assume IAM role before run the task",
 )
+@click.pass_context
 def main(*args, **kwargs):
     """Run task in Amazon Elastic Container Service"""
     print(kwargs)
