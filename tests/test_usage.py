@@ -14,7 +14,22 @@ def test_init():
                 assert mock_exit.call_args[0][0] == 42
 
 
-def test_usage():
+def test_help():
+    runner = CliRunner()
+    result = runner.invoke(main, ['--help'])
+    assert "Usage" in result.output
+    assert "Error" not in result.output
+
+
+def test_help_short():
+    runner = CliRunner()
+    result = runner.invoke(main, ['-h'])
+    assert "Usage" in result.output
+    assert "Error" not in result.output
+
+
+def test_required_options():
     runner = CliRunner()
     result = runner.invoke(main, [])
     assert "Usage" in result.output
+    assert "Error" in result.output
