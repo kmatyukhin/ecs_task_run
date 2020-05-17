@@ -1,0 +1,4 @@
+#!/usr/bin/env python3
+from ecs_task_run import run
+
+run()

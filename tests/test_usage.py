@@ -1,22 +1,11 @@
 import pytest
-import mock
 from click.testing import CliRunner
-from ecs_task_run import main, ECSTaskRun
-
-
-def test_init():
-    import ecs_task_run
-    with mock.patch.object(ecs_task_run, "main", return_value=42):
-        with mock.patch.object(ecs_task_run, "__name__", "__main__"):
-            with mock.patch.object(ecs_task_run.sys,'exit') as mock_exit:
-                ecs_task_run.init()
-
-                assert mock_exit.call_args[0][0] == 42
+from ecs_task_run import run, ECSTaskRun
 
 
 def test_help():
     runner = CliRunner()
-    result = runner.invoke(main, ['--help'])
+    result = runner.invoke(run, ['--help'])
 
     assert "Usage" in result.output
     assert "Error" not in result.output
@@ -24,7 +13,7 @@ def test_help():
 
 def test_help_short():
     runner = CliRunner()
-    result = runner.invoke(main, ['-h'])
+    result = runner.invoke(run, ['-h'])
 
     assert "Usage" in result.output
     assert "Error" not in result.output
@@ -32,7 +21,7 @@ def test_help_short():
 
 def test_required_options():
     runner = CliRunner()
-    result = runner.invoke(main, [])
+    result = runner.invoke(run, [])
 
     assert "Usage" in result.output
     assert "Error" in result.output
@@ -40,7 +29,7 @@ def test_required_options():
 
 def test_assume_role_option():
     runner = CliRunner()
-    result = runner.invoke(main, [
+    result = runner.invoke(run, [
         "--cluster=1",
         "--region=1",
         "--assume-role=test-role"
