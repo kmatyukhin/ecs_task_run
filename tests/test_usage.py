@@ -1,7 +1,7 @@
 import pytest
 import mock
 from click.testing import CliRunner
-from ecs_task_run import main, assume_role
+from ecs_task_run import main, ECSTaskRun
 
 
 def test_init():
@@ -58,7 +58,7 @@ def test_assume_role_function(sts_stub):
         },
         service_response={},
     )
-
-    result = assume_role(sts_stub.client, role='arn:::00000000000:test-role')
+    runner = ECSTaskRun(sts_client=sts_stub.client)
+    result = runner.assume_role(role='arn:::00000000000:test-role')
 
     assert result == "Success"

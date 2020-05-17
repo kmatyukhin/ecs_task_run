@@ -8,6 +8,24 @@ import boto3
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
 
+class ECSTaskRun:
+    params = {}
+    def __init__(self, *args, sts_client=None, **kwargs):
+        self.params = kwargs
+        self.sts_client = (
+            sts_client if sts_client is not None
+            else boto3.client("sts", region_name=kwargs['aws_region']))
+        if 'assume_role' in kwargs:
+            self.assume_role(kwargs['assume_role'])
+
+    def assume_role(self, role):
+        self.sts_client.assume_role(
+            RoleArn=role,
+            RoleSessionName="Session",
+        )
+        return "Success"
+
+
 @click.command(context_settings=CONTEXT_SETTINGS)
 @click.pass_context
 @click.option(
@@ -25,18 +43,7 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 def main(*args, **kwargs):
     """Run task in Amazon Elastic Container Service"""
     print(kwargs)
-    if 'assume_role' in kwargs:
-        sts_client = boto3.client("sts", region_name=kwargs['aws_region'])
-        assume_role(sts_client, kwargs['assume_role'])
-
-
-def assume_role(sts_client, role):
-    sts_client.assume_role(
-        RoleArn=role,
-        RoleSessionName="Session",
-    )
-    return "Success"
-
+    runner = ECSTaskRun(*args, **kwargs)
 
 def init():
     """Module init function"""
