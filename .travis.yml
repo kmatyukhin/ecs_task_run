@@ -9,7 +9,7 @@ install:
   - pip install codecov
 
 script:
-  - pytest --cov=ecs_task_run
+  - pytest --cov=ecs_task_run --cov-report=xml
 
 after_success:
   - codecov
