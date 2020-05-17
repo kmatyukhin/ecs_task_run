@@ -11,7 +11,7 @@ setup(
     name='ecs_task_run',
     version='0.0.1',
     author='Konstantin Matyukhin',
-    author_email='konstantin.matyukhin@clarivate.com',
+    author_email='kmatyukhin@gmail.com',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
