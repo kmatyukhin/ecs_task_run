@@ -16,6 +16,10 @@ from .ecs_task_run import ECSTaskRun
     "--assume-role", "-a", "assume_role", type=str,
     help="Assume IAM role before run the task",
 )
+@click.option(
+    "--image", "-i", "image", type=str, required=True,
+    help="The image used to start a container",
+)
 @click.pass_context
 def run(*args, **kwargs):
     """Run task in Amazon Elastic Container Service"""
