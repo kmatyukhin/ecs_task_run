@@ -66,21 +66,3 @@ def test_assume_role_function(sts_stub):
         role='arn:::00000000000:test-role')
 
     assert result == "Success"
-
-
-def test_register_task_definition_function(ecs_stub):
-    ecs_stub.add_response(
-        'register_task_definition',
-        expected_params={
-            'family': 'family',
-            'containerDefinitions': (),
-        },
-        service_response={},
-    )
-    runner = ECSTaskRun(
-        ecs_client=ecs_stub.client,
-        image='',
-        aws_region="us-west-2")
-    result = runner.register_task_definition()
-
-    assert result == "Success"
